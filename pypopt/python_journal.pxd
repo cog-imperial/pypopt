@@ -1,14 +1,9 @@
 from libcpp.string cimport string
 from libcpp cimport bool
 cimport pypopt.ipopt as ip
+from pypopt.coin.journalist cimport Journal
 
 
 cdef extern from "python_journal.hpp":
-    cdef cppclass PythonJournal:
+    cdef cppclass PythonJournal(Journal):
         PythonJournal(ip.EJournalLevel, object)
-        string Name()
-        void SetPrintLevel(ip.EJournalCategory, ip.EJournalLevel)
-        void SetAllPrintLevels(ip.EJournalLevel)
-        bool IsAccepted(ip.EJournalCategory, ip.EJournalLevel)
-        void Print(ip.EJournalCategory, ip.EJournalLevel, const char *)
-        void FlushBuffer()
