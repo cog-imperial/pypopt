@@ -3,6 +3,7 @@ from libcpp.string cimport string
 from pypopt.coin.return_codes cimport *
 from pypopt.coin.options_list cimport *
 from pypopt.coin.smart_ptr cimport *
+from pypopt.coin.journalist cimport *
 
 
 cdef extern from "coin/IpIpoptApplication.hpp" namespace "Ipopt":
@@ -14,4 +15,5 @@ cdef extern from "coin/IpIpoptApplication.hpp" namespace "Ipopt":
         bool RethrowNonIpoptException(bool)
         void PrintCopyrightMessage()
         SmartPtr[OptionsList] Options()
+        SmartPtr[Journalist] Jnlst()
         # SmartPtr[SolveStatistics] Statistics()

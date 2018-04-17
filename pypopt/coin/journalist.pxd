@@ -10,9 +10,9 @@ cdef extern from "coin/IpJournalist.hpp" namespace "Ipopt":
         void PrintStringOverLines(EJournalLevel, EJournalCategory,
                                   Index, Index, const string&)
         void PrintfIndented(EJournalLevel, EJournalCategory, Index, const char *, ...)
-        void ProduceOutput(EJournalLevel, EJournalCategory)
+        bool ProduceOutput(EJournalLevel, EJournalCategory)
         void FlushBuffer()
-        void AddJournal(const SmartPtr[Journal])
+        bool AddJournal(const SmartPtr[Journal])
         SmartPtr[Journal] AddFileJournal(const string&, const string&, EJournalLevel)
         SmartPtr[Journal] GetJournal(const string&)
         void DeleteAllJournals()
