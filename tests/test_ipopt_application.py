@@ -1,10 +1,5 @@
 import pytest
-from pypopt import IpoptApplication
-
-
-@pytest.fixture
-def app():
-    return IpoptApplication()
+from tests.conftest import app
 
 
 def test_can_set_string_options(app):
