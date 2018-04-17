@@ -10,15 +10,25 @@ cdef class IpoptApplication:
 
     def initialize(self, allow_clobber=False, params_file=None):
         if params_file is not None:
-            return d(self.c_app).Initialize(params_file, allow_clobber)
+            return ApplicationReturnStatus(
+                d(self.c_app).Initialize(params_file, allow_clobber)
+            )
         else:
-            return d(self.c_app).Initialize(allow_clobber)
+            return ApplicationReturnStatus(
+                d(self.c_app).Initialize(allow_clobber)
+            )
 
     def print_copyright_message(self):
         d(self.c_app).PrintCopyrightMessage()
 
     def rethrow_non_ipopt_exceptions(self, dorethrow):
         d(self.c_app).RethrowNonIpoptException(dorethrow)
+
+    def optimize_tnlp(self, TNLP tnlp):
+        cdef ip.SmartPtr[ip.TNLP] c_tnlp = tnlp.c_tnlp
+        return ApplicationReturnStatus(
+            d(self.c_app).OptimizeTNLP(c_tnlp)
+        )
 
     def journalist(self):
         journalist = Journalist()
@@ -37,10 +47,9 @@ cdef class IpoptApplication:
         return options
 
     def statistics(self):
-        return
-        # stats = SolveStatistics()
-        # c_stats = self.c_app.Statistics()
-        # if ip.IsNull(c_stats):
-        #     return
-        # stats.c_statistics = c_stats
-        # return stats
+        stats = SolveStatistics()
+        c_stats = d(self.c_app).Statistics()
+        if ip.IsNull(c_stats):
+            return
+        stats.c_statistics = c_stats
+        return stats

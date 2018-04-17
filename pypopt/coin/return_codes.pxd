@@ -19,3 +19,7 @@ cdef extern from "coin/IpReturnCodes.hpp" namespace "Ipopt":
         NonIpopt_Exception_Thrown = -101
         Insufficient_Memory = -102
         Internal_Error = -199
+
+    cdef enum AlgorithmMode:
+        RegularMode
+        RestorationPhaseMode
