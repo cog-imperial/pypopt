@@ -14,13 +14,23 @@ TODO
 Requirements
 ------------
 
-TODO
+ * A working C++ compiler
+ * Cython
+ * Ipopt
+ * Pytest + pytest-runner + pytest-cov for testing
 
 
 Installation
 ------------
 
-TODO
+To install `pypopt` simply run:
+
+	python setup.py install
+
+
+If you have Ipopt installed in a different location than `/usr`:
+
+	IPOPT_INCLUDE_DIR=/path/to/ipopt/include IPOPT_LIBRARY_DIR=/path/to/ipopt/lib python setup.py install
 
 
 License

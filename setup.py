@@ -1,6 +1,16 @@
-from setuptools import setup
+import os
+from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from Cython.Build import cythonize
+
+include_dirs = []
+if os.environ.get('IPOPT_INCLUDE_DIR'):
+    include_dirs.append(os.environ.get('IPOPT_INCLUDE_DIR'))
+
+library_dirs = []
+if os.environ.get('IPOPT_LIBRARY_DIR'):
+    library_dirs.append(os.environ.get('IPOPT_LIBRARY_DIR'))
+
 
 extensions = [Extension(
     'pypopt._cython',
@@ -11,15 +21,15 @@ extensions = [Extension(
     language='c++',
     extra_compile_args=['-std=c++11'],
     extra_link_args=['-std=c++11'],
-    include_dirs=['/Users/cek/miniconda3/envs/gopt/include'],
-    library_dirs=['/Users/cek/miniconda3/envs/gopt/lib'],
+    include_dirs=include_dirs,
+    library_dirs=library_dirs,
 )]
 
 
 setup(
     name='pypopt',
-    packages=['pypopt'],
+    packages=find_packages(exclude=['tests']),
     ext_modules=cythonize(extensions),
-    setup_requires=['pytest-runner'],
+    setup_requires=['pytest-runner', 'cython'],
     tests_require=['pytest', 'pytest-cov'],
 )
