@@ -38,8 +38,8 @@ cdef cppclass WrapperTNLP(ip.TNLP):
                          ip.Index m, ip.Number *g_l, ip.Number *g_u):
         cdef ip.Number[:] py_x_l = <ip.Number[:n]>x_l
         cdef ip.Number[:] py_x_u = <ip.Number[:n]>x_u
-        cdef ip.Number[:] py_g_l = <ip.Number[:n]>g_l
-        cdef ip.Number[:] py_g_u = <ip.Number[:n]>g_u
+        cdef ip.Number[:] py_g_l = <ip.Number[:m]>g_l
+        cdef ip.Number[:] py_g_u = <ip.Number[:m]>g_u
         return owner.fill_bounds_info(py_x_l, py_x_u, py_g_l, py_g_u)
 
     bool get_starting_point(ip.Index n, bool init_x, ip.Number *x,
