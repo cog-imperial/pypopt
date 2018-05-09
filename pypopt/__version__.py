@@ -11,22 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Pypopt is a wrapper around Ipopt C++ interface.
-"""
 
-__all__ = [
-    'IpoptApplication', 'TNLP', 'PythonJournal', 'EJournalLevel', 'EJournalCategory',
-    'IndexStyle', 'NLPInfo',
-]
+# pylint: disable=missing-docstring
 
-# pylint: disable=no-name-in-module
-from pypopt._cython import (
-    IpoptApplication,
-    TNLP,
-    PythonJournal,
-    EJournalLevel,
-    EJournalCategory,
-    IndexStyle,
-    NLPInfo,
-)
+__version__ = '0.1.0'
+__author__ = 'Francesco Ceccon'
+__author_email__ = 'francesco@ceccon.me'
+__license__ = 'Apache 2.0'
+__copyright__ = 'Copyright 2018 Francesco Ceccon'
