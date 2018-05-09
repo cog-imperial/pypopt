@@ -45,10 +45,27 @@ cdef cppclass WrapperTNLP(ip.TNLP):
     bool get_starting_point(ip.Index n, bool init_x, ip.Number *x,
                             bool init_z, ip.Number *z_l, ip.Number *z_u,
                             ip.Index m, bool init_lambda, ip.Number *lambda_):
-        cdef ip.Number[:] py_x = <ip.Number[:n]>x
-        cdef ip.Number[:] py_z_l = <ip.Number[:n]>z_l
-        cdef ip.Number[:] py_z_u = <ip.Number[:n]>z_u
-        cdef ip.Number[:] py_lambda = <ip.Number[:m]>lambda_
+        cdef ip.Number[:] py_x
+        cdef ip.Number[:] py_z_l
+        cdef ip.Number[:] py_z_u
+        cdef ip.Number[:] py_lambda
+
+        if init_x:
+            py_x = <ip.Number[:n]>x
+        else:
+            py_x = None
+
+        if init_z:
+            py_z_l = <ip.Number[:n]>z_l
+            py_z_u = <ip.Number[:n]>z_u
+        else:
+            py_z_l = py_z_u = None
+
+        if init_lambda:
+            py_lambda = <ip.Number[:m]>lambda_
+        else:
+            py_lambda = None
+
         return owner.fill_starting_point(
             init_x, py_x, init_z, py_z_l, py_z_u, init_lambda, py_lambda
         )
