@@ -1,3 +1,4 @@
+from libcpp cimport bool
 from pypopt.coin.alg_types cimport *
 from pypopt.coin.typedef cimport *
 from pypopt.coin.return_codes cimport *
@@ -16,6 +17,6 @@ cdef extern from "coin/IpTNLP.hpp" namespace "Ipopt":
                                Index, const Number *, const Number *, Number, const IpoptData *,
                                IpoptCalculatedQuantities *)
 
-        void intermediate_callback(AlgorithmMode, Index, Number, Number, Number, Number, Number,
+        bool intermediate_callback(AlgorithmMode, Index, Number, Number, Number, Number, Number,
                                    Number, Number, Number, Index, const IpoptData *,
                                    IpoptCalculatedQuantities *)
