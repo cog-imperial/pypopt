@@ -36,10 +36,25 @@ cdef cppclass WrapperTNLP(ip.TNLP):
 
     bool get_bounds_info(ip.Index n, ip.Number *x_l, ip.Number *x_u,
                          ip.Index m, ip.Number *g_l, ip.Number *g_u):
-        cdef ip.Number[:] py_x_l = <ip.Number[:n]>x_l
-        cdef ip.Number[:] py_x_u = <ip.Number[:n]>x_u
-        cdef ip.Number[:] py_g_l = <ip.Number[:m]>g_l
-        cdef ip.Number[:] py_g_u = <ip.Number[:m]>g_u
+        cdef ip.Number[:] py_x_l
+        cdef ip.Number[:] py_x_u
+        cdef ip.Number[:] py_g_l
+        cdef ip.Number[:] py_g_u
+
+        if n:
+            py_x_l = <ip.Number[:n]>x_l
+            py_x_u = <ip.Number[:n]>x_u
+        else:
+            py_x_l = None
+            py_x_u = None
+
+        if m:
+            py_g_l = <ip.Number[:m]>g_l
+            py_g_u = <ip.Number[:m]>g_u
+        else:
+            py_g_l = None
+            py_g_u = None
+
         return owner.fill_bounds_info(py_x_l, py_x_u, py_g_l, py_g_u)
 
     bool get_starting_point(ip.Index n, bool init_x, ip.Number *x,
@@ -85,7 +100,11 @@ cdef cppclass WrapperTNLP(ip.TNLP):
     bool eval_g(ip.Index n, const ip.Number *x, bool new_x, ip.Index m,
                 ip.Number *g):
         cdef ip.Number[:] py_x = <ip.Number[:n]>x
-        cdef ip.Number[:] py_g = <ip.Number[:m]>g
+        cdef ip.Number[:] py_g
+        if m:
+            py_g = <ip.Number[:m]>g
+        else:
+            py_g = None
         return owner.eval_g(py_x, new_x, py_g)
 
     bool eval_jac_g(ip.Index n, const ip.Number *x, bool new_x, ip.Index m,
@@ -97,12 +116,18 @@ cdef cppclass WrapperTNLP(ip.TNLP):
         cdef ip.Number[:] py_values
 
         if values == NULL:
-            py_row = <ip.Index[:nele_jac]>row
-            py_col = <ip.Index[:nele_jac]>col
+            if nele_jac:
+                py_row = <ip.Index[:nele_jac]>row
+                py_col = <ip.Index[:nele_jac]>col
+            else:
+                py_row = py_col = None
             return owner.fill_jacobian_g_structure(py_row, py_col)
         else:
             py_x = <ip.Number[:n]>x
-            py_values = <ip.Number[:nele_jac]>values
+            if nele_jac:
+                py_values = <ip.Number[:nele_jac]>values
+            else:
+                py_values = None
             return owner.eval_jacobian_g(py_x, new_x, py_values)
 
     bool eval_h(ip.Index n, const ip.Number *x, bool new_x, ip.Number
@@ -121,7 +146,10 @@ cdef cppclass WrapperTNLP(ip.TNLP):
             return owner.fill_hessian_structure(py_row, py_col)
         else:
             py_x = <ip.Number[:n]>x
-            py_lambda = <ip.Number[:m]>lambda_
+            if m:
+                py_lambda = <ip.Number[:m]>lambda_
+            else:
+                py_lambda = None
             py_values = <ip.Number[:nele_hess]>values
             return owner.eval_hessian(
                 py_x, new_x, obj_factor, py_lambda, new_lambda, py_values
@@ -136,8 +164,15 @@ cdef cppclass WrapperTNLP(ip.TNLP):
         cdef ip.Number[:] py_x = <ip.Number[:n]>x
         cdef ip.Number[:] py_z_l = <ip.Number[:n]>z_l
         cdef ip.Number[:] py_z_u = <ip.Number[:n]>z_u
-        cdef ip.Number[:] py_g = <ip.Number[:m]>g
-        cdef ip.Number[:] py_lambda = <ip.Number[:m]>lambda_
+        cdef ip.Number[:] py_g
+        cdef ip.Number[:] py_lambda
+
+        if m:
+            py_g = <ip.Number[:m]>g
+            py_lambda = <ip.Number[:m]>lambda_
+        else:
+            py_g = None
+            py_lambda = None
 
         owner.finalize_solution(
             py_x, py_z_l, py_z_u, py_g, py_lambda, obj_value
