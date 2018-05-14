@@ -22,7 +22,7 @@ cdef class IpoptApplication:
         d(self.c_app).PrintCopyrightMessage()
 
     def rethrow_non_ipopt_exceptions(self, dorethrow):
-        d(self.c_app).RethrowNonIpoptException(dorethrow)
+        return d(self.c_app).RethrowNonIpoptException(dorethrow)
 
     def optimize_tnlp(self, TNLP tnlp):
         cdef ip.SmartPtr[ip.TNLP] c_tnlp = tnlp.c_tnlp
