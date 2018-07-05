@@ -17,8 +17,8 @@ PythonJournal
 In Pypopt you can use Python objects as targets for Ipopt journaling.
 The Python objects needs to implement two methods:
 
- * ``write(str)``: called to write ``str`` to the stream object
- * ``flush()``: called to flush the stream
+* ``write(str)``: called to write ``str`` to the stream object
+* ``flush()``: called to flush the stream
 
 This means we can use Python3 ``io.StringIO`` to capture Ipopt output to string:
 
@@ -34,10 +34,10 @@ This means we can use Python3 ``io.StringIO`` to capture Ipopt output to string:
 Requirements
 ------------
 
- * A working C++ compiler
- * Cython
- * Ipopt
- * Pytest + pytest-runner + pytest-cov for testing
+* A working C++ compiler
+* Cython
+* Ipopt
+* Pytest + pytest-runner + pytest-cov for testing
 
 
 Ipopt Installation
