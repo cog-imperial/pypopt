@@ -1,2 +1,4 @@
 include README.rst CHANGELOG.rst LICENSE.txt
 recursive-include tests *.py
+recursive-include pypopt *.pyx *.pxd *.pxi *.hpp
+recursive-include pypopt/coin *.pxd

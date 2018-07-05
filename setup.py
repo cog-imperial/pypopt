@@ -40,7 +40,6 @@ library_dirs = []
 if os.environ.get('IPOPT_LIBRARY_DIR'):
     library_dirs.append(os.environ.get('IPOPT_LIBRARY_DIR'))
 
-
 extensions = [Extension(
     'pypopt._cython',
     sources=[

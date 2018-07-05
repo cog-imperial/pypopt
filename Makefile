@@ -3,7 +3,7 @@ test:
 
 publish:
 	pip install twine
-	python setup.py sdist bdist_wheel
+	python setup.py sdist
 	twine upload dist/*
 	rm -rf build dist .egg suspect.egg-info
 
