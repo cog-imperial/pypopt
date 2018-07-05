@@ -26,6 +26,11 @@ version_path = project_root / 'pypopt' / '__version__.py'
 with version_path.open() as f:
     exec(f.read(), about)
 
+with (project_root / 'README.rst').open() as f:
+    readme = f.read()
+
+with (project_root / 'CHANGELOG.rst').open() as f:
+    changelog = f.read()
 
 include_dirs = []
 if os.environ.get('IPOPT_INCLUDE_DIR'):
@@ -52,15 +57,22 @@ extensions = [Extension(
 
 setup(
     name='pypopt',
-    description='Wrappers for Ipopt C++ library.',
+    description=about['__description__'],
     version=about['__version__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
     license=about['__license__'],
+    long_description=readme + '\n\n' + changelog,
     packages=find_packages(exclude=['tests']),
     ext_modules=cythonize(extensions),
-    package_data={'pypopt': ['*.pyi']},
     include_package_data=True,
     setup_requires=['pytest-runner', 'cython'],
     tests_require=['pytest', 'pytest-cov'],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Scientific/Engineering :: Mathematics',
+    ],
 )

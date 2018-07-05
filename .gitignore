@@ -13,3 +13,4 @@ venv
 docs/_build
 *.so
 *.cpp
+.pytest_cache
