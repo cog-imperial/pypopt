@@ -1,19 +1,7 @@
-# Copyright 2018 Francesco Ceccon
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # pylint: skip-file
+import pytest
 import numpy as np
+from numpy.testing import assert_array_almost_equal
 from pypopt import IpoptApplication, TNLP, IndexStyle, NLPInfo
 from pypopt.__version__ import __version__
 
@@ -25,6 +13,9 @@ class Hs071NLP(TNLP):
         self.nnz_jac = 8
         self.nnz_hess = 10
         self.nnz_h = self.nnz_hess
+
+        self.solution = None
+        self.objective = None
 
     def get_nlp_info(self):
         return NLPInfo(
@@ -142,22 +133,18 @@ class Hs071NLP(TNLP):
         return True
 
     def finalize_solution(self, x, z_l, z_u, g, lambda_, obj_value):
-        print(np.array(x), obj_value)
+        self.solution = np.array(x)
+        self.objective = obj_value
 
 
-if __name__ == '__main__':
-    print('Using pypopt version %s' % __version__)
+def test_tnlp():
     app = IpoptApplication()
-
-    opts = app.options()
-    opts.set_string_value('output_file', 'ipopt.out')
-    opts.set_numeric_value('tol', 1e-7)
 
     status = app.initialize()
     if status.is_error():
         raise RuntimeError('initialize: {}'.format(status.message()))
 
     hs = Hs071NLP()
-
     res = app.optimize_tnlp(hs)
-    print(res)
+    expected_solution = np.array([1.000, 4.74299963, 3.82114998, 1.37940829])
+    assert_array_almost_equal(hs.solution, expected_solution)

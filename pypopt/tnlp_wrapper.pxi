@@ -1,29 +1,28 @@
+# Copyright 2018 Francesco Ceccon
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 cimport pypopt.ipopt as ip
 
 
-cpdef enum IndexStyle:
-    C_STYLE
-    FORTRAN_STYLE
-
-cdef class NLPInfo:
-    cdef public ip.Index n, m, nnz_jac, nnz_hess
-    cdef public ip.IndexStyleEnum index_style
-
-    def __init__(self, n, m, nnz_jac, nnz_hess, index_style=None):
-        cdef ip.IndexStyleEnum c_index_style = ip.IndexStyleEnum.C_STYLE
-        self.n = n
-        self.m = m
-        self.nnz_jac = nnz_jac
-        self.nnz_hess = nnz_hess
-        if index_style is not None:
-            c_index_style = index_style
-        self.index_style = c_index_style
-
-
 cdef cppclass WrapperTNLP(ip.TNLP):
-    object owner
+    TNLP owner
 
-    bool get_nlp_info(ip.Index &n, ip.Index &m, ip.Index &nnz_jac_g, ip.Index &nnz_h_lag, ip.IndexStyleEnum &index_style):
+    WrapperTNLP(TNLP owner_):
+        this.owner = owner_
+
+    bool get_nlp_info(ip.Index &n, ip.Index &m, ip.Index &nnz_jac_g,
+                      ip.Index &nnz_h_lag, ip.IndexStyleEnum &index_style):
         info = owner.get_nlp_info()
         if info is None:
             return False
@@ -55,7 +54,7 @@ cdef cppclass WrapperTNLP(ip.TNLP):
             py_g_l = None
             py_g_u = None
 
-        return owner.fill_bounds_info(py_x_l, py_x_u, py_g_l, py_g_u)
+        return owner.get_bounds_info(py_x_l, py_x_u, py_g_l, py_g_u)
 
     bool get_starting_point(ip.Index n, bool init_x, ip.Number *x,
                             bool init_z, ip.Number *z_l, ip.Number *z_u,
@@ -81,7 +80,7 @@ cdef cppclass WrapperTNLP(ip.TNLP):
         else:
             py_lambda = None
 
-        return owner.fill_starting_point(
+        return owner.get_starting_point(
             init_x, py_x, init_z, py_z_l, py_z_u, init_lambda, py_lambda
         )
 
@@ -121,14 +120,14 @@ cdef cppclass WrapperTNLP(ip.TNLP):
                 py_col = <ip.Index[:nele_jac]>col
             else:
                 py_row = py_col = None
-            return owner.fill_jacobian_g_structure(py_row, py_col)
+            return owner.get_jac_g_structure(py_row, py_col)
         else:
             py_x = <ip.Number[:n]>x
             if nele_jac:
                 py_values = <ip.Number[:nele_jac]>values
             else:
                 py_values = None
-            return owner.eval_jacobian_g(py_x, new_x, py_values)
+            return owner.eval_jac_g(py_x, new_x, py_values)
 
     bool eval_h(ip.Index n, const ip.Number *x, bool new_x, ip.Number
                 obj_factor, ip.Index m, const ip.Number *lambda_,
@@ -143,7 +142,7 @@ cdef cppclass WrapperTNLP(ip.TNLP):
         if values == NULL:
             py_row = <ip.Index[:nele_hess]>row
             py_col = <ip.Index[:nele_hess]>col
-            return owner.fill_hessian_structure(py_row, py_col)
+            return owner.get_h_structure(py_row, py_col)
         else:
             py_x = <ip.Number[:n]>x
             if m:
@@ -151,7 +150,7 @@ cdef cppclass WrapperTNLP(ip.TNLP):
             else:
                 py_lambda = None
             py_values = <ip.Number[:nele_hess]>values
-            return owner.eval_hessian(
+            return owner.eval_h(
                 py_x, new_x, obj_factor, py_lambda, new_lambda, py_values
             )
 
@@ -177,13 +176,3 @@ cdef cppclass WrapperTNLP(ip.TNLP):
         owner.finalize_solution(
             py_x, py_z_l, py_z_u, py_g, py_lambda, obj_value
         )
-
-
-
-cdef class TNLP:
-    cdef ip.SmartPtr[WrapperTNLP] c_tnlp
-
-    def __init__(self):
-        wrapper = new WrapperTNLP()
-        wrapper.owner = self
-        self.c_tnlp = wrapper

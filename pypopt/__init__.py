@@ -16,7 +16,7 @@ Pypopt is a wrapper around Ipopt C++ interface.
 """
 
 __all__ = [
-    'IpoptApplication', 'TNLP', 'PythonJournal', 'EJournalLevel', 'EJournalCategory',
+    'IpoptApplication', 'TNLP', 'TNLP', 'PythonJournal', 'EJournalLevel', 'EJournalCategory',
     'IndexStyle', 'NLPInfo',
 ]
 

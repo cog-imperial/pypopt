@@ -25,7 +25,7 @@ cdef class IpoptApplication:
         return d(self.c_app).RethrowNonIpoptException(dorethrow)
 
     def optimize_tnlp(self, TNLP tnlp):
-        cdef ip.SmartPtr[ip.TNLP] c_tnlp = tnlp.c_tnlp
+        cdef ip.SmartPtr[ip.TNLP] c_tnlp = new WrapperTNLP(tnlp)
         return ApplicationReturnStatus(
             d(self.c_app).OptimizeTNLP(c_tnlp)
         )

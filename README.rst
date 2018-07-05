@@ -23,12 +23,12 @@ Requirements
 Installation
 ------------
 
-To install `pypopt` simply run:
+To install `pypopt` simply run::
 
 	python setup.py install
 
 
-If you have Ipopt installed in a different location than `/usr`:
+If you have Ipopt installed in a different location than ``/usr``::
 
 	IPOPT_INCLUDE_DIR=/path/to/ipopt/include IPOPT_LIBRARY_DIR=/path/to/ipopt/lib python setup.py install
 
