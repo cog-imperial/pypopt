@@ -17,7 +17,7 @@ Pypopt is a wrapper around Ipopt C++ interface.
 
 __all__ = [
     'IpoptApplication', 'TNLP', 'TNLP', 'PythonJournal', 'EJournalLevel', 'EJournalCategory',
-    'IndexStyle', 'NLPInfo',
+    'IndexStyle', 'NLPInfo', 'PyomoNLP'
 ]
 
 # pylint: disable=no-name-in-module
@@ -30,3 +30,5 @@ from pypopt._cython import (
     IndexStyle,
     NLPInfo,
 )
+
+from pypopt.pyomo import PyomoNLP
