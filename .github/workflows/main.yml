@@ -30,6 +30,7 @@ jobs:
         which pip
         which python
         pip install -r requirements.txt
+        ls /usr/share/miniconda/envs/test/
         python setup.py develop
     - name: Lint with flake8
       shell: bash -l {0}
