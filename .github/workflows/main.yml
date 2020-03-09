@@ -24,10 +24,12 @@ jobs:
     - name: Build native extension
       shell: bash -l {0}
       run: |
+        sudo apt-get install -y cppad
         conda install -c anaconda conda-build
         conda install -c conda-forge ipopt
         conda info
         pip install -r requirements.txt
+        pip install pybind11
         export CFLAGS="-I${CONDA_PREFIX}/include"
         export CXXFLAGS="-I${CONDA_PREFIX}/include"
         python setup.py develop
