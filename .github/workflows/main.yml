@@ -17,9 +17,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - uses: goanpeca/setup-miniconda@v1
       with:
+        auto-update-conda: true
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
@@ -27,7 +27,8 @@ jobs:
         pip install -r requirements.txt
     - name: Build native extension
       run: |
-        sudo apt-get install -y build-essential cppad coinor-libipopt-dev
+        conda install -c anaconda conda-build
+        conda install -c conda-forge ipopt
         python setup.py develop
     - name: Lint with flake8
       run: |
