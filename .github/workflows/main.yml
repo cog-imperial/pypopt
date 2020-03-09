@@ -21,23 +21,24 @@ jobs:
       with:
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
     - name: Build native extension
+      shell: bash -l {0}
       run: |
         conda install -c anaconda conda-build
         conda install -c conda-forge ipopt
         conda info
+        which pip
         which python
+        pip install -r requirements.txt
         python setup.py develop
     - name: Lint with flake8
+      shell: bash -l {0}
       run: |
         pip install flake8
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 cppyad --count --exit-zero --statistics
     - name: Test with pytest
+      shell: bash -l {0}
       run: |
         pip install pytest
         pytest
