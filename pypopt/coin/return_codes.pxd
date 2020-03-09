@@ -1,4 +1,4 @@
-cdef extern from "coin/IpReturnCodes.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpReturnCodes.hpp>" namespace "Ipopt":
     cdef enum ApplicationReturnStatus:
         Solve_Succeeded = 0
         Solved_To_Acceptable_Level = 1

@@ -6,7 +6,7 @@ from pypopt.coin.ipopt_data cimport *
 from pypopt.coin.ipopt_calculated_quantities cimport *
 
 
-cdef extern from "coin/IpTNLP.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpTNLP.hpp>" namespace "Ipopt":
     ctypedef enum IndexStyleEnum "Ipopt::TNLP::IndexStyleEnum":
         C_STYLE "Ipopt::TNLP::C_STYLE"
         FORTRAN_STYLE "Ipopt::TNLP::FORTRAN_STYLE"

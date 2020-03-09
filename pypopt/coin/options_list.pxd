@@ -3,7 +3,7 @@ from libcpp.string cimport string
 from pypopt.coin.typedef cimport Index, Number
 
 
-cdef extern from "coin/IpOptionsList.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpOptionsList.hpp>" namespace "Ipopt":
     cdef cppclass OptionsList:
         void clear()
         void PrintList(string&)

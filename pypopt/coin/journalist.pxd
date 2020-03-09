@@ -4,7 +4,7 @@ from pypopt.coin.typedef cimport Index
 from pypopt.coin.smart_ptr cimport SmartPtr
 
 
-cdef extern from "coin/IpJournalist.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpJournalist.hpp>" namespace "Ipopt":
     cdef cppclass Journalist:
         void Printf(EJournalLevel, EJournalCategory, const char *, ...)
         void PrintStringOverLines(EJournalLevel, EJournalCategory,

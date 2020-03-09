@@ -1,7 +1,7 @@
 from libcpp cimport bool
 
 
-cdef extern from "coin/IpSmartPtr.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpSmartPtr.hpp>" namespace "Ipopt":
     cdef cppclass SmartPtr[T]:
         SmartPtr()
         SmartPtr(T*)
