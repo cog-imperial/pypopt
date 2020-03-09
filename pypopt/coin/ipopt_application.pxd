@@ -8,7 +8,7 @@ from pypopt.coin.solve_statistics cimport *
 from pypopt.coin.tnlp cimport *
 
 
-cdef extern from "coin/IpIpoptApplication.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpIpoptApplication.hpp>" namespace "Ipopt":
     cdef cppclass IpoptApplication:
         IpoptApplication() except +
         ApplicationReturnStatus Initialize(string, bool)

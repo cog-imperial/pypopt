@@ -1,4 +1,4 @@
-cdef extern from "coin/IpAlgTypes.hpp" namespace "Ipopt":
+cdef extern from "<coin/IpAlgTypes.hpp>" namespace "Ipopt":
     cdef enum SolverReturn:
         SUCCESS
         MAXITER_EXCEEDED
