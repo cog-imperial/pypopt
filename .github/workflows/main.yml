@@ -30,6 +30,7 @@ jobs:
         conda install -c anaconda conda-build
         conda install -c conda-forge ipopt
         conda info
+        which python
         python setup.py develop
     - name: Lint with flake8
       run: |
