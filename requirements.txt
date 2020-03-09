@@ -5,4 +5,4 @@ pytest-cov
 pytest-runner
 pybind11
 cython
-cppyad
+cppyad>=0.1.1
