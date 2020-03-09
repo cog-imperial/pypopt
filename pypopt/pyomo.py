@@ -14,7 +14,9 @@
 
 import numpy as np
 from collections import namedtuple
-from cppyad import build_adfun_from_model, SparseJacobianWork, SparseHessianWork
+from cppyad import (
+    build_adfun_from_model, SparseJacobianWork, SparseHessianWork
+)
 
 from pypopt._cython import TNLP, NLPInfo
 
@@ -22,14 +24,17 @@ from pypopt._cython import TNLP, NLPInfo
 _ipopt_index_t = np.int32
 
 
-PyomoNLPSolution = namedtuple('PyomoNLPSolution', ['x', 'z_l', 'z_u', 'g', 'lambda_', 'obj_value'])
+PyomoNLPSolution = namedtuple(
+    'PyomoNLPSolution', ['x', 'z_l', 'z_u', 'g', 'lambda_', 'obj_value']
+)
 
 
 class PyomoNLP(TNLP):
     def __init__(self, model, active=True):
         super().__init__()
 
-        adfun, nx, nf, ng, x_init, x_lb, x_ub, g_lb, g_ub = build_adfun_from_model(model, active=active)
+        adfun, nx, nf, ng, x_init, x_lb, x_ub, g_lb, g_ub = \
+            build_adfun_from_model(model, active=active)
 
         self._adfun = adfun
         self._nx = nx
@@ -51,8 +56,10 @@ class PyomoNLP(TNLP):
         self._w = np.zeros(self._nf + self._ng, dtype=np.float64)
         self._grad = np.zeros(self._nx, dtype=np.float64)
 
-        jac_pat, jac_row, jac_col, jac_row_ipopt, jac_col_ipopt, jac_skip_ipopt, grad_col_ipopt = \
-            _jacobian_structure(adfun, nx, nf, ng)
+        (
+            jac_pat, jac_row, jac_col, jac_row_ipopt, jac_col_ipopt,
+            jac_skip_ipopt, grad_col_ipopt
+        ) = _jacobian_structure(adfun, nx, nf, ng)
         self._jac_pat = jac_pat
         self._jac_row = jac_row
         self._jac_col = jac_col
@@ -101,7 +108,8 @@ class PyomoNLP(TNLP):
         if self._jac_cached:
             return
         self._adfun.sparse_jacobian_reverse(
-            self._cached_x, self._jac_pat, self._jac_row, self._jac_col, self._jac, self._jac_work
+            self._cached_x, self._jac_pat, self._jac_row, self._jac_col,
+            self._jac, self._jac_work
         )
         self._jac_cached = True
 
@@ -115,7 +123,8 @@ class PyomoNLP(TNLP):
         for i in range(ng):
             self._w[nf+i] = self._cached_y[i]
         self._adfun.sparse_hessian(
-            self._cached_x, self._w, self._hes_pat, self._hes_row, self._hes_col, self._hes, self._hes_work
+            self._cached_x, self._w, self._hes_pat, self._hes_row,
+            self._hes_col, self._hes, self._hes_work
         )
         self._hes_cached = True
 
@@ -134,7 +143,8 @@ class PyomoNLP(TNLP):
         np.copyto(np.asarray(g_u), self._g_ub, casting='no')
         return True
 
-    def get_starting_point(self, init_x, x, init_z, z_l, z_u, init_lambda, lambda_):
+    def get_starting_point(self, init_x, x, init_z, z_l, z_u, init_lambda,
+                           lambda_):
         assert init_x
         assert not init_z
         assert not init_lambda
@@ -175,7 +185,11 @@ class PyomoNLP(TNLP):
         if new_x:
             self._cache_new_x(x)
         self._compute_jacobian()
-        np.copyto(np.asarray(values), self._jac[self._jac_skip_ipopt-1:], casting='no')
+        np.copyto(
+            np.asarray(values),
+            self._jac[self._jac_skip_ipopt-1:],
+            casting='no'
+        )
         return True
 
     def get_h_structure(self, row, col):
@@ -242,7 +256,6 @@ def _jacobian_structure(adfun, nx, nf, ng):
 
 
 def _hessian_structure(adfun, nx, nf, ng):
-    m = nf + ng
     r = np.eye(nx, dtype=np.bool).reshape(nx*nx)
     s = np.ones(nx, dtype=np.bool)
 
