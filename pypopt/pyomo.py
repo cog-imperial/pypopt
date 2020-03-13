@@ -30,11 +30,11 @@ PyomoNLPSolution = namedtuple(
 
 
 class PyomoNLP(TNLP):
-    def __init__(self, model, active=True):
+    def __init__(self, model, active=True, sort=False, descend_into=True):
         super().__init__()
 
         adfun, nx, nf, ng, x_init, x_lb, x_ub, g_lb, g_ub = \
-            build_adfun_from_model(model, active=active)
+            build_adfun_from_model(model, active=active, sort=sort, descend_into=descend_into)
 
         self._adfun = adfun
         self._nx = nx
