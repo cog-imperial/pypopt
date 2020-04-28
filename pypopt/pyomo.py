@@ -33,7 +33,7 @@ class PyomoNLP(TNLP):
     def __init__(self, model, active=True, sort=False, descend_into=True):
         super().__init__()
 
-        adfun, nx, nf, ng, x_init, x_lb, x_ub, g_lb, g_ub = \
+        adfun, nx, nf, ng, x_init, x_lb, x_ub, g_lb, g_ub, pyomo_to_ipopt_map = \
             build_adfun_from_model(model, active=active, sort=sort, descend_into=descend_into)
 
         self._adfun = adfun
@@ -80,6 +80,7 @@ class PyomoNLP(TNLP):
         self._invalidate_dual_caches()
         self._invalidate_primal_caches()
 
+        self.pyomo_to_ipopt_map = pyomo_to_ipopt_map
         self.solution = None
 
     def _invalidate_primal_caches(self):
@@ -208,11 +209,11 @@ class PyomoNLP(TNLP):
 
     def finalize_solution(self, x, z_l, z_u, g, lambda_, obj_value):
         self.solution = PyomoNLPSolution(
-            np.asarray(x),
-            np.asarray(z_l),
-            np.asarray(z_u),
-            np.asarray(g),
-            np.asarray(lambda_),
+            np.asarray(x).copy(),
+            np.asarray(z_l).copy(),
+            np.asarray(z_u).copy(),
+            np.asarray(g).copy(),
+            np.asarray(lambda_).copy(),
             obj_value,
         )
 
