@@ -14,9 +14,9 @@
 
 # pylint: disable=missing-docstring
 
-__version__ = '0.4.2'
+__version__ = '0.5.0'
 __author__ = 'Francesco Ceccon'
 __author_email__ = 'francesco@ceccon.me'
 __license__ = 'Apache 2.0'
-__copyright__ = 'Copyright 2018 Francesco Ceccon'
+__copyright__ = 'Copyright 2020 Francesco Ceccon'
 __description__ = 'Bindings to Ipopt C++ library.'
