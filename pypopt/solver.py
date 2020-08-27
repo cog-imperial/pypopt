@@ -121,7 +121,7 @@ class PypoptDirectSolver(DirectSolver):
 
         for opt, opt_value in self.options.items():
             if opt == 'max_cpu_time':
-                solver_options.set_integer_value(opt, int(opt_value))
+                solver_options.set_numeric_value(opt, int(opt_value))
             elif isinstance(opt_value, str):
                 solver_options.set_string_value(opt, opt_value)
             elif isinstance(opt_value, int):
